@@ -120,6 +120,19 @@ tools/                   asset generator
 The 3×3 solver implements [Herbert Kociemba's two-phase algorithm](https://kociemba.org/cube.htm).
 Its coordinate definitions follow his description of the method.
 
+## Third-party assets
+
+The app has no third-party code libraries, but it uses a few third-party vector icons:
+
+| Asset | Files | Source | License |
+| --- | --- | --- | --- |
+| UI icons (undo, redo, settings, hint…) | `app/src/main/res/drawable/ic_*.xml` (except the two below) | [Material Design Icons](https://github.com/google/material-design-icons) by Google | [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
+| GitHub mark | `ic_github.xml` | [Octicons](https://github.com/primer/octicons) by GitHub | MIT |
+| X logo | `ic_x.xml` | [Simple Icons](https://simpleicons.org) | CC0 1.0 |
+
+The GitHub and X logos are trademarks of their owners and are used only to link to the developer's
+profiles. The launcher icon, sound effects and all source code are original and MIT licensed.
+
 ## License
 
 Twist Cubee is released under the [MIT License](LICENSE).

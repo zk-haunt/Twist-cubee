@@ -23,7 +23,7 @@
     <string name="about_privacy">Privacy</string>
     <string name="about_links_note">Links open in your browser. Twist Cubee itself never connects to the internet.</string>
     <string name="about_credits">Credits</string>
-    <string name="about_credits_text">3×3 solver: Herbert Kociemba\'s two-phase algorithm.\nRendering: native OpenGL ES 3.0, written in Kotlin.\nIcon, sounds and code are original and MIT licensed.</string>
+    <string name="about_credits_text">3×3 solver: Herbert Kociemba\'s two-phase algorithm.\nRendering: native OpenGL ES 3.0, written in Kotlin.\nApp icon, sounds and code: original, MIT licensed.\nUI icons: Material Design Icons by Google (Apache 2.0).\nGitHub mark: Octicons (MIT). X logo: Simple Icons (CC0).</string>
     <string name="about_no_browser">No app found to open links</string>
     <string name="choose_size">Cube size %1$d</string>
 
