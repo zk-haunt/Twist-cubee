@@ -41,9 +41,9 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Without keystore.properties the release build is signed with the local debug key so
-            // it can still be installed for testing. Never publish a debug-signed build.
-            signingConfig = signingConfigs.getByName(if (hasReleaseKey) "release" else "debug")
+            // Without keystore.properties the release APK is left unsigned (this is what F-Droid
+            // expects: it signs builds itself). Use installDebug for local testing without a key.
+            signingConfig = if (hasReleaseKey) signingConfigs.getByName("release") else null
         }
     }
 

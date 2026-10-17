@@ -64,8 +64,9 @@ file containing `sdk.dir=/path/to/Android/Sdk`. That file is git-ignored.
    Both that file and `*.jks` keystores are git-ignored, so your keys never end up in the repository.
 2. Run `./gradlew assembleRelease` (or `bundleRelease`).
 
-Without `keystore.properties`, release builds are signed with your local debug key. That's fine for
-testing, but never publish such a build.
+Without `keystore.properties`, release builds come out unsigned
+(`app-release-unsigned.apk`). That's what F-Droid expects, because it signs its own builds. To try the
+app locally without a key, use `./gradlew installDebug`.
 
 ### Regenerating artwork and sounds
 
