@@ -5,9 +5,9 @@ a real solver, speedcubing timer and statistics, in an app under 300 KB that nev
 
 <p>
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="24%" alt="Menu" />
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="24%" alt="Turning a layer" />
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="24%" alt="Hint" />
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width="24%" alt="7x7 cube" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="24%" alt="Playing" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="24%" alt="Settings" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width="24%" alt="About" />
 </p>
 
 ## Features

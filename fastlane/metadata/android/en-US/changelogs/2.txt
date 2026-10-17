@@ -1,0 +1,2 @@
+• New app ID: io.github.zk_haunt.twistcubee. If you installed 1.0.0, uninstall it; this version installs as a separate app.
+• About page and README now credit the third-party icons (Material Design Icons, Octicons, Simple Icons).

@@ -873,7 +873,7 @@ class MainActivity : Activity(), CubeGame.Listener {
                 typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             })
             addView(TextView(context).apply {
-                text = getString(R.string.about_version, BuildConfig.VERSION_NAME)
+                text = getString(R.string.about_version, versionName())
                 setTextColor(getColor(R.color.text_tertiary))
                 textSize = 12f
             })
@@ -902,6 +902,19 @@ class MainActivity : Activity(), CubeGame.Listener {
 
         c.addView(sectionLabel(R.string.about_credits))
         c.addView(smallText(getString(R.string.about_credits_text)))
+    }
+
+    /** Read from the installed package (no generated BuildConfig class, which keeps builds reproducible). */
+    private fun versionName(): String = try {
+        val info = if (Build.VERSION.SDK_INT >= 33) {
+            packageManager.getPackageInfo(packageName, android.content.pm.PackageManager.PackageInfoFlags.of(0))
+        } else {
+            @Suppress("DEPRECATION")
+            packageManager.getPackageInfo(packageName, 0)
+        }
+        info.versionName ?: ""
+    } catch (e: Exception) {
+        ""
     }
 
     private fun smallText(value: String): TextView = TextView(this).apply {
