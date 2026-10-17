@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.TwistCubee" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/bg_bottom</item>
+        <item name="android:colorBackground">@color/bg_bottom</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:colorPrimary">@color/bg_top</item>
+        <item name="android:colorPrimaryDark">@color/bg_bottom</item>
+        <item name="android:colorControlActivated">@color/accent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:alertDialogTheme">@style/Theme.TwistCubee.Dialog</item>
+    </style>
+
+    <style name="Theme.TwistCubee.Dialog" parent="@android:style/Theme.Material.Dialog.Alert">
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@drawable/bg_panel</item>
+    </style>
+</resources>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/game_layer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    tools:ignore="MergeRootFrame">
+
+    <LinearLayout
+        android:id="@+id/game_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp">
+
+        <FrameLayout
+            android:id="@+id/game_top_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                style="@style/RoundIconButton"
+                android:layout_gravity="start|center_vertical"
+                android:contentDescription="@string/back"
+                android:src="@drawable/ic_arrow_back" />
+
+            <LinearLayout
+                android:id="@+id/timer_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <app.twistcubee.ui.TimerView
+                    android:id="@+id/timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/moves"
+                    style="@style/InfoText"
+                    android:layout_marginTop="-2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_view"
+                    style="@style/RoundIconButton"
+                    android:contentDescription="@string/reset_view"
+                    android:src="@drawable/ic_center_focus" />
+
+                <ImageButton
+                    android:id="@+id/btn_lock"
+                    style="@style/RoundIconButton"
+                    android:layout_marginStart="8dp"
+                    android:contentDescription="@string/lock_rotation"
+                    android:src="@drawable/ic_lock_open" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/status"
+            style="@style/StatusPill"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/game_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_bottom_bar"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/btn_undo"
+            style="@style/BarItem"
+            android:drawableTop="@drawable/ic_undo"
+            android:text="@string/undo" />
+
+        <TextView
+            android:id="@+id/btn_redo"
+            style="@style/BarItem"
+            android:drawableTop="@drawable/ic_redo"
+            android:text="@string/redo" />
+
+        <TextView
+            android:id="@+id/btn_scramble"
+            style="@style/BarItem"
+            android:drawableTop="@drawable/ic_shuffle"
+            android:text="@string/scramble" />
+
+        <TextView
+            android:id="@+id/btn_hint"
+            style="@style/BarItem"
+            android:drawableTop="@drawable/ic_hint"
+            android:text="@string/hint" />
+
+        <TextView
+            android:id="@+id/btn_solve"
+            style="@style/BarItem"
+            android:drawableTop="@drawable/ic_solve"
+            android:text="@string/solve" />
+    </LinearLayout>
+</FrameLayout>

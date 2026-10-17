@@ -1,0 +1,1 @@
+Offline 3D cube puzzle from 2×2 to 20×20 with timer, solver and hints

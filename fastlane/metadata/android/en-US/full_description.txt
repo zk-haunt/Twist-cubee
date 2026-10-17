@@ -1,0 +1,28 @@
+Twist Cubee is a fast, beautiful 3D cube puzzle that works completely offline.
+
+<b>Every size</b>
+Play cubes from 2×2×2 all the way up to 20×20×20. Every size keeps its own saved game, so you can come back to a half-solved 9×9 whenever you like.
+
+<b>Natural controls</b>
+• Drag across the cube to turn a layer. The sticker under your finger follows it, and a quick flick finishes the turn.
+• Drag the background, or use two fingers anywhere, to spin the whole cube freely.
+• Pinch to zoom and twist to roll. Double-tap to reset the view.
+• A lock button stops accidental rotation.
+
+<b>Speedcubing tools</b>
+• Animated scramble, then a timer that starts with your first move.
+• Optional 15-second WCA-style inspection.
+• Statistics for every size: best time, average, Ao5, fewest moves and recent solves.
+
+<b>Help when you are stuck</b>
+• Hints on 2×2 and 3×3 say what to do in plain words ("Turn the green face clockwise") and wiggle the layer to turn.
+• Auto-solve uses an optimal 2×2 solver and Kociemba's two-phase algorithm for the 3×3 (about 20 moves). Bigger cubes rewind your moves.
+
+<b>Make it yours</b>
+Stickerless or classic stickers, four color schemes (including a color-blind-friendly one), three body colors, four backgrounds, and animation speed.
+
+<b>Private by design</b>
+No internet permission, no ads, no tracking, no analytics. Your progress never leaves your device.
+
+<b>Light and fast</b>
+A tiny app (under 300 KB) with a native OpenGL ES 3.0 renderer. It draws even a 20×20 cube with a handful of GPU calls, and uses no battery when the cube is still.

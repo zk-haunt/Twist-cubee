@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Twist Cubee</string>
+    <string name="app_title">TWIST CUBEE</string>
+    <string name="app_subtitle">3D CUBE PUZZLE</string>
+
+    <string name="play">Play</string>
+    <string name="continue_game">Continue</string>
+    <string name="new_game">New game</string>
+    <string name="free_play">Free play</string>
+    <string name="stats">Stats</string>
+    <string name="settings">Settings</string>
+    <string name="help">How to play</string>
+    <string name="about">About</string>
+    <string name="about_version">Version %1$s · MIT License</string>
+    <string name="about_tagline">A free and open-source 3D cube puzzle. No ads, no tracking, no internet, just cubes.</string>
+    <string name="about_developer">Developer</string>
+    <string name="about_made_by">Made by %1$s</string>
+    <string name="about_github">GitHub</string>
+    <string name="about_x">X (Twitter)</string>
+    <string name="about_source">Source code</string>
+    <string name="about_source_detail">Read it, star it, fork it, or open an issue</string>
+    <string name="about_privacy">Privacy</string>
+    <string name="about_links_note">Links open in your browser. Twist Cubee itself never connects to the internet.</string>
+    <string name="about_credits">Credits</string>
+    <string name="about_credits_text">3×3 solver: Herbert Kociemba\'s two-phase algorithm.\nRendering: native OpenGL ES 3.0, written in Kotlin.\nIcon, sounds and code are original and MIT licensed.</string>
+    <string name="about_no_browser">No app found to open links</string>
+    <string name="choose_size">Cube size %1$d</string>
+
+    <string name="back">Back to menu</string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+    <string name="scramble">Scramble</string>
+    <string name="hint">Hint</string>
+    <string name="solve">Solve</string>
+    <string name="reset_view">Reset view</string>
+    <string name="lock_rotation">Lock cube rotation</string>
+    <string name="close">Close</string>
+
+    <string name="size_format">%1$d×%1$d×%1$d</string>
+    <plurals name="moves_count">
+        <item quantity="one">%d move</item>
+        <item quantity="other">%d moves</item>
+    </plurals>
+    <string name="no_solves">No solves yet</string>
+    <plurals name="best_format">
+        <item quantity="one">Best %1$s · %2$d solve</item>
+        <item quantity="other">Best %1$s · %2$d solves</item>
+    </plurals>
+    <plurals name="continue_format">
+        <item quantity="one">In progress · %d move</item>
+        <item quantity="other">In progress · %d moves</item>
+    </plurals>
+
+    <string name="tier_mini">Mini</string>
+    <string name="tier_classic">Classic</string>
+    <string name="tier_advanced">Advanced</string>
+    <string name="tier_expert">Expert</string>
+    <string name="tier_master">Master</string>
+    <string name="tier_grandmaster">Grandmaster</string>
+    <string name="tier_legend">Legend</string>
+
+    <string name="status_tip">Swipe across the cube to turn a layer</string>
+    <string name="status_scrambling">Scrambling…</string>
+    <string name="status_ready">Timer starts with your first move</string>
+    <string name="status_inspecting">Inspecting · the timer starts on your first move</string>
+    <string name="status_preparing">Preparing solver…</string>
+    <string name="status_thinking">Thinking…</string>
+    <string name="status_solving">Solving · %1$d / %2$d</string>
+    <string name="status_rewinding">Rewinding · %1$d / %2$d</string>
+    <string name="status_hint">Hint: %1$s · tap Hint again to play it</string>
+    <string name="status_hint_face">Turn the %1$s face %2$s · tap Hint to play it</string>
+    <string name="dir_clockwise">clockwise</string>
+    <string name="dir_counter_clockwise">counter-clockwise</string>
+    <string name="dir_half">twice</string>
+    <string name="status_locked">Cube rotation locked</string>
+    <string name="status_unlocked">Cube rotation unlocked</string>
+    <string name="status_solver_failed">Solver unavailable for this state</string>
+    <string name="status_already_solved">Already solved!</string>
+
+    <!-- Sticker color names in face order U R F D L B, per color scheme. -->
+    <string-array name="color_names">
+        <item>white</item>
+        <item>red</item>
+        <item>green</item>
+        <item>yellow</item>
+        <item>orange</item>
+        <item>blue</item>
+    </string-array>
+    <string-array name="color_names_cb">
+        <item>white</item>
+        <item>vermilion</item>
+        <item>green</item>
+        <item>yellow</item>
+        <item>pink</item>
+        <item>blue</item>
+    </string-array>
+
+    <string name="solved_title">SOLVED!</string>
+    <string name="solved_detail">%1$s · %2$s</string>
+    <string name="solved_new_best">NEW BEST TIME</string>
+    <string name="solved_assisted">Solved with help · not ranked</string>
+    <string name="solved_free">Free play · not timed</string>
+    <string name="solved_personal_best">Best %1$s</string>
+
+    <string name="confirm_solve_title">Auto-solve?</string>
+    <string name="confirm_solve_message">This ends your timed attempt. The solve will not count toward your statistics.</string>
+    <string name="confirm_solve_ok">Solve it</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm_scramble_title">Start a new scramble?</string>
+    <string name="confirm_scramble_message">Your current solve will be lost.</string>
+    <string name="confirm_scramble_ok">Scramble</string>
+    <string name="confirm_reset_title">Reset statistics?</string>
+    <string name="confirm_reset_message">All recorded times for every cube size will be deleted.</string>
+    <string name="confirm_reset_ok">Reset</string>
+
+    <string name="settings_colors">Color scheme</string>
+    <string name="settings_tiles">Tiles</string>
+    <string name="tiles_stickerless">Stickerless</string>
+    <string name="tiles_stickers">Stickers</string>
+    <string name="settings_body">Cube body</string>
+    <string name="settings_background">Background</string>
+    <string name="settings_speed">Animation speed</string>
+    <string name="settings_inspection">15-second inspection</string>
+    <string name="settings_sound">Sound effects</string>
+    <string name="settings_haptics">Vibration</string>
+    <string name="settings_timer">Show timer and moves</string>
+    <string name="settings_reset_stats">Reset statistics</string>
+    <string name="speed_slow">Slow</string>
+    <string name="speed_normal">Normal</string>
+    <string name="speed_fast">Fast</string>
+    <string name="speed_instant">Instant</string>
+    <string name="privacy_note">Twist Cubee works fully offline. It has no internet permission, no ads, no tracking and no analytics. Your progress never leaves this device.</string>
+
+    <string name="stats_best">Best</string>
+    <string name="stats_average">Average</string>
+    <string name="stats_ao5">Ao5</string>
+    <string name="stats_fewest">Fewest moves</string>
+    <string name="stats_recent">Recent: %1$s</string>
+    <plurals name="solves_count">
+        <item quantity="one">%d solve</item>
+        <item quantity="other">%d solves</item>
+    </plurals>
+    <string name="stats_empty">No solves recorded yet.\nScramble a cube and beat the clock!</string>
+
+    <string name="help_text">• Drag across the cube to turn a layer. Flick for a quick turn.\n\n• Drag on the empty space around the cube to rotate the whole cube. Use two fingers anywhere to rotate, pinch to zoom, and twist to roll.\n\n• Double-tap the background, or tap the target icon, to reset the view.\n\n• The lock icon stops the cube from rotating by accident while you turn layers.\n\n• After a scramble, the timer starts with your first move and stops when every face is a single color. Turn on 15-second inspection in Settings to study the cube first.\n\n• Hint and Solve use a real solver on 2×2 and 3×3 cubes. On bigger cubes, Solve rewinds every move back to the start.\n\n• Undo and Redo step through your moves. Your progress on every cube size is saved automatically.</string>
+</resources>

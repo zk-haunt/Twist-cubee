@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menu_layer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MergeRootFrame,UselessParent">
+
+    <!-- Portrait: full-screen column with the cube showing through the spacer. Landscape: a side
+         column next to the cube (switched in code, so rotating never recreates the GL context). -->
+    <LinearLayout
+        android:id="@+id/menu_column"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/menu_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="28dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/menu_title"
+                style="@style/Title"
+                android:text="@string/app_title" />
+
+            <TextView
+                android:id="@+id/menu_subtitle"
+                style="@style/Subtitle"
+                android:layout_marginTop="4dp"
+                android:text="@string/app_subtitle" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/menu_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/menu_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAligned="true"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/size_label"
+                    style="@style/SizeLabel" />
+
+                <TextView
+                    android:id="@+id/size_name"
+                    style="@style/SizeName"
+                    android:layout_marginStart="10dp" />
+            </LinearLayout>
+
+            <!-- Every size one tap away; chips are added in code. -->
+            <HorizontalScrollView
+                android:id="@+id/size_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fadingEdgeLength="32dp"
+                android:overScrollMode="never"
+                android:requiresFadingEdge="horizontal"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/size_strip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="12dp" />
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/size_info"
+                style="@style/InfoText"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btn_play"
+                style="@style/PrimaryButton"
+                android:text="@string/play" />
+
+            <Button
+                android:id="@+id/btn_new"
+                style="@style/SecondaryButton"
+                android:layout_marginTop="10dp"
+                android:text="@string/new_game" />
+
+            <LinearLayout
+                android:id="@+id/menu_icons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btn_stats"
+                    style="@style/MenuItem"
+                    android:drawableTop="@drawable/ic_stats"
+                    android:text="@string/stats" />
+
+                <TextView
+                    android:id="@+id/btn_settings"
+                    style="@style/MenuItem"
+                    android:drawableTop="@drawable/ic_settings"
+                    android:text="@string/settings" />
+
+                <TextView
+                    android:id="@+id/btn_help"
+                    style="@style/MenuItem"
+                    android:drawableTop="@drawable/ic_help"
+                    android:text="@string/help" />
+
+                <TextView
+                    android:id="@+id/btn_about"
+                    style="@style/MenuItem"
+                    android:drawableTop="@drawable/ic_info"
+                    android:text="@string/about" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

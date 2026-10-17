@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Developer details shown on the About page. Edit these if your handles or repository change. -->
+<resources>
+    <string name="about_author" translatable="false">zk-haunt</string>
+    <string name="about_github_user" translatable="false">zk-haunt</string>
+    <string name="about_x_user" translatable="false">zk_haunt</string>
+    <string name="about_repo_name" translatable="false">twist-cubee</string>
+</resources>
