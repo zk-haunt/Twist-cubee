@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Twist Cubee</string>
+    <string name="app_title">TWIST CUBEE</string>
+    <string name="app_subtitle">3D CUBE PUZZLE</string>
+
+    <string name="play">Graj</string>
+    <string name="continue_game">Kontynuuj</string>
+    <string name="new_game">Nowa gra</string>
+    <string name="free_play">Gra swobodna</string>
+    <string name="stats">Statystyki</string>
+    <string name="settings">Ustawienia</string>
+    <string name="help">Jak grać</string>
+    <string name="about">O aplikacji</string>
+    <string name="about_version">Wersja %1$s · Licencja MIT</string>
+    <string name="about_tagline">Darmowa i otwartoźródłowa układanka kostki 3D. Bez reklam, bez śledzenia, bez internetu – po prostu kostki.</string>
+    <string name="about_developer">Twórca</string>
+    <string name="about_made_by">Stworzone przez %1$s</string>
+    <string name="about_github">GitHub</string>
+    <string name="about_x">X (Twitter)</string>
+    <string name="about_source">Kod źródłowy</string>
+    <string name="about_source_detail">Przeczytaj go, daj gwiazdkę, sklonuj lub zgłoś błąd</string>
+    <string name="about_privacy">Prywatność</string>
+    <string name="about_links_note">Linki otwierają się w Twojej przeglądarce. Sama aplikacja Twist Cubee nigdy nie łączy się z internetem.</string>
+    <string name="about_credits">Podziękowania</string>
+    <string name="about_credits_text">Solver 3×3: dwufazowy algorytm Herberta Kociemby.\nRenderowanie: natywne OpenGL ES 3.0, napisane w Kotlinie.\nIkona aplikacji, dźwięki i kod: autorskie, na licencji MIT.\nIkony UI: Material Design Icons od Google (Apache 2.0).\nZnak GitHub: Octicons (MIT). Logo X: Simple Icons (CC0).</string>
+    <string name="about_no_browser">Nie znaleziono aplikacji do otwierania linków</string>
+    <string name="choose_size">Rozmiar kostki %1$d</string>
+
+    <string name="back">Wróć do menu</string>
+    <string name="undo">Cofnij</string>
+    <string name="redo">Ponów</string>
+    <string name="scramble">Pomieszaj</string>
+    <string name="hint">Podpowiedź</string>
+    <string name="solve">Rozwiąż</string>
+    <string name="reset_view">Resetuj widok</string>
+    <string name="lock_rotation">Zablokuj obrót kostki</string>
+    <string name="close">Zamknij</string>
+
+    <string name="size_format">%1$d×%1$d×%1$d</string>
+    <plurals name="moves_count">
+        <item quantity="one">%d ruch</item>
+        <item quantity="few">%d ruchy</item>
+        <item quantity="many">%d ruchów</item>
+        <item quantity="other">%d ruchu</item>
+    </plurals>
+    <string name="no_solves">Brak ułożeń</string>
+    <plurals name="best_format">
+        <item quantity="one">Najlepszy %1$s · %2$d ułożenie</item>
+        <item quantity="few">Najlepszy %1$s · %2$d ułożenia</item>
+        <item quantity="many">Najlepszy %1$s · %2$d ułożeń</item>
+        <item quantity="other">Najlepszy %1$s · %2$d ułożenia</item>
+    </plurals>
+    <plurals name="continue_format">
+        <item quantity="one">W toku · %d ruch</item>
+        <item quantity="few">W toku · %d ruchy</item>
+        <item quantity="many">W toku · %d ruchów</item>
+        <item quantity="other">W toku · %d ruchu</item>
+    </plurals>
+
+    <string name="tier_mini">Mini</string>
+    <string name="tier_classic">Klasyczna</string>
+    <string name="tier_advanced">Zaawansowana</string>
+    <string name="tier_expert">Ekspert</string>
+    <string name="tier_master">Mistrz</string>
+    <string name="tier_grandmaster">Arcymistrz</string>
+    <string name="tier_legend">Legenda</string>
+
+    <string name="status_tip">Przesuń palcem po kostce, aby obrócić warstwę</string>
+    <string name="status_scrambling">Mieszanie…</string>
+    <string name="status_ready">Stoper ruszy przy Twoim pierwszym ruchu</string>
+    <string name="status_inspecting">Oglądanie · stoper ruszy przy Twoim pierwszym ruchu</string>
+    <string name="status_preparing">Przygotowywanie solvera…</string>
+    <string name="status_thinking">Myślenie…</string>
+    <string name="status_solving">Rozwiązywanie · %1$d / %2$d</string>
+    <string name="status_rewinding">Cofanie · %1$d / %2$d</string>
+    <string name="status_hint">Podpowiedź: %1$s · dotknij „Podpowiedź” ponownie, aby ją odtworzyć</string>
+    <string name="status_hint_face">Obróć ścianę: %1$s %2$s · dotknij „Podpowiedź”, aby ją odtworzyć</string>
+    <string name="dir_clockwise">zgodnie z ruchem wskazówek zegara</string>
+    <string name="dir_counter_clockwise">przeciwnie do ruchu wskazówek zegara</string>
+    <string name="dir_half">dwa razy</string>
+    <string name="status_locked">Obrót kostki zablokowany</string>
+    <string name="status_unlocked">Obrót kostki odblokowany</string>
+    <string name="status_solver_failed">Solver niedostępny dla tego stanu kostki</string>
+    <string name="status_already_solved">Kostka jest już ułożona!</string>
+
+    <!-- Nazwy kolorów naklejek w kolejności ścian U R F D L B, według schematu kolorów. -->
+    <string-array name="color_names">
+        <item>biały</item>
+        <item>czerwony</item>
+        <item>zielony</item>
+        <item>żółty</item>
+        <item>pomarańczowy</item>
+        <item>niebieski</item>
+    </string-array>
+    <string-array name="color_names_cb">
+        <item>biały</item>
+        <item>cynobrowy</item>
+        <item>zielony</item>
+        <item>żółty</item>
+        <item>różowy</item>
+        <item>niebieski</item>
+    </string-array>
+
+    <string name="solved_title">UŁOŻONA!</string>
+    <string name="solved_detail">%1$s · %2$s</string>
+    <string name="solved_new_best">NOWY REKORD ŻYCIOWY</string>
+    <string name="solved_assisted">Ułożona z pomocą · brak miejsca w rankingu</string>
+    <string name="solved_free">Gra swobodna · bez pomiaru czasu</string>
+    <string name="solved_personal_best">Najlepszy %1$s</string>
+
+        <string name="confirm_solve_title">Automatyczne układanie?</string>
+    <string name="confirm_solve_message">To zakończy Twoją próbę z pomiarem czasu. To ułożenie nie zostanie zaliczone do statystyk.</string>
+    <string name="confirm_solve_ok">Rozwiąż</string>
+    <string name="cancel">Anuluj</string>
+    <string name="confirm_scramble_title">Rozpocząć nowe mieszanie?</string>
+    <string name="confirm_scramble_message">Twoje obecne ułożenie zostanie utracone.</string>
+    <string name="confirm_scramble_ok">Pomieszaj</string>
+    <string name="confirm_reset_title">Zresetować statystyki?</string>
+    <string name="confirm_reset_message">Wszystkie zapisane czasy dla każdego rozmiaru kostki zostaną usunięte.</string>
+    <string name="confirm_reset_ok">Resetuj</string>
+
+    <string name="settings_colors">Schemat kolorów</string>
+    <string name="settings_tiles">Płytki</string>
+    <string name="tiles_stickerless">Bez naklejek (Stickerless)</string>
+    <string name="tiles_stickers">Z naklejkami (Stickers)</string>
+    <string name="settings_body">Korpus kostki</string>
+    <string name="settings_background">Tło</string>
+    <string name="settings_speed">Prędkość animacji</string>
+    <string name="settings_inspection">15-sekundowa inspekcja</string>
+    <string name="settings_sound">Efekty dźwiękowe</string>
+    <string name="settings_haptics">Wibracje</string>
+    <string name="settings_timer">Pokazuj stoper i ruchy</string>
+    <string name="settings_reset_stats">Resetuj statystyki</string>
+    <string name="speed_slow">Wolno</string>
+    <string name="speed_normal">Normalnie</string>
+    <string name="speed_fast">Szybko</string>
+    <string name="speed_instant">Natychmiast</string>
+    <string name="privacy_note">Twist Cubee działa całkowicie offline. Nie posiada uprawnień do korzystania z internetu, nie wyświetla reklam, nie śledzi użytkownika ani nie zbiera danych analitycznych. Twój postęp nigdy nie opuszcza tego urządzenia.</string>
+
+    <string name="stats_best">Najlepszy</string>
+    <string name="stats_average">Średnia</string>
+    <string name="stats_ao5">Ao5</string>
+    <string name="stats_fewest">Najmniej ruchów</string>
+    <string name="stats_recent">Ostatnie: %1$s</string>
+    <plurals name="solves_count">
+        <item quantity="one">%d ułożenie</item>
+        <item quantity="few">%d ułożenia</item>
+        <item quantity="many">%d ułożeń</item>
+        <item quantity="other">%d ułożenia</item>
+    </plurals>
+    <string name="stats_empty">Nie zarejestrowano jeszcze żadnych ułożeń.\nPomieszaj kostkę i pokonaj czas!</string>
+
+    <string name="help_text">• Przesuń palcem po kostce, aby obrócić warstwę. Szybkie machnięcie wykona gwałtowny obrót.\n\n• Przeciągaj palcem po pustej przestrzeni wokół kostki, aby obracać całą kostkę. Użyj dwóch palców w dowolnym miejscu, aby obracać widok, uszczypnij, aby przybliżyć, lub obróć dwoma palcami, aby przechylić kostkę.\n\n• Stuknij dwukrotnie w tło lub dotknij ikony celownika, aby zresetować widok.\n\n• Ikona kłódki blokuje obrót całej kostki, zapobiegając przypadkowym zmianom widoku podczas obracania warstw.\n\n• Po pomieszaniu stoper rusza wraz z Twoim pierwszym ruchem i zatrzymuje się, gdy każda ściana będzie miała jeden kolor. Włącz 15-sekundową inspekcję w Ustawieniach, aby najpierw przeanalizować układ kostki.\n\n• Funkcje „Podpowiedź” i „Rozwiąż” używają prawdziwego programu rozwiązującego (solvera) dla kostek 2×2 oraz 3×3. Przy większych kostkach funkcja „Rozwiąż” po prostu cofa po kolei każdy wykonany ruch do stanu początkowego.\n\n• Przyciski „Cofnij” i „Ponów” pozwalają na krokowe przeglądanie Twoich ruchów. Twój postęp dla każdego rozmiaru kostki jest zapisywany automatycznie.</string>
+</resources>
