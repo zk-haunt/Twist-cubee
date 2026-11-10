@@ -141,6 +141,7 @@ class CubeGame(private val listener: Listener) {
     private var dragDirY = 0f
     private var dragPxPerRad = 1f
     private var dragSign = 1f
+    private var dragDetent = 0 // whole quarter turns the dragged layer has passed
     private val sampleT = LongArray(SAMPLES)
     private val sampleA = FloatArray(SAMPLES)
     private var sampleCount = 0
@@ -1170,15 +1171,23 @@ class CubeGame(private val listener: Listener) {
         layerLo = layer
         layerHi = layer
         layerAngle = 0f
+        dragDetent = 0
         sampleCount = 0
         touchMode = T_LAYER
         if (status == ST_READY) startTimer() else if (status == ST_SOLVING && !timerRunning) resumeTimer()
+        emit(EV_GRAB)
         updateLayerDrag(now)
     }
 
     private fun updateLayerDrag(now: Long) {
         val s = (lastX - downX) * dragDirX + (lastY - downY) * dragDirY
         layerAngle = dragSign * s / dragPxPerRad
+        // Truncation keeps the start position silent and clicks as the layer passes ±90°, ±180°…
+        val detent = (layerAngle / HALF_PI).toInt()
+        if (detent != dragDetent) {
+            dragDetent = detent
+            emit(EV_DETENT)
+        }
         sampleT[sampleHead] = now
         sampleA[sampleHead] = layerAngle
         sampleHead = (sampleHead + 1) % SAMPLES
@@ -1308,6 +1317,8 @@ class CubeGame(private val listener: Listener) {
         const val EV_HUD = 4
         const val EV_SOLVED = 8
         const val EV_SCRAMBLED = 16
+        const val EV_GRAB = 32
+        const val EV_DETENT = 64
 
         const val SCREEN_MENU = 0
         const val SCREEN_GAME = 1

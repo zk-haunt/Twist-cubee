@@ -23,8 +23,8 @@ android {
         applicationId = "io.github.zk_haunt.twistcubee"
         minSdk = 24
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.1.0"
     }
 
     signingConfigs {
@@ -50,6 +50,11 @@ android {
             // expects: it signs builds itself). Use installDebug for local testing without a key.
             signingConfig = if (hasReleaseKey) signingConfigs.getByName("release") else null
         }
+    }
+
+    // Lists the app's translations so Android 13+ offers them under Settings → Apps → Language.
+    androidResources {
+        generateLocaleConfig = true
     }
 
     compileOptions {

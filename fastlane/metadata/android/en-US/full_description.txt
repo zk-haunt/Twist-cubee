@@ -8,10 +8,11 @@ Play cubes from 2×2×2 all the way up to 20×20×20. Every size keeps its own s
 • Drag the background, or use two fingers anywhere, to spin the whole cube freely.
 • Pinch to zoom and twist to roll. Double-tap to reset the view.
 • A lock button stops accidental rotation.
+• Haptic feedback like a real cube: a tick when you grab a layer, a click at each quarter turn and when the turn lands.
 
 <b>Speedcubing tools</b>
 • Animated scramble, then a timer that starts with your first move.
-• Optional 15-second WCA-style inspection.
+• Optional 15-second WCA-style inspection, with haptic warnings at 8 and 12 seconds.
 • Statistics for every size: best time, average, Ao5, fewest moves and recent solves.
 
 <b>Help when you are stuck</b>
@@ -19,7 +20,7 @@ Play cubes from 2×2×2 all the way up to 20×20×20. Every size keeps its own s
 • Auto-solve uses an optimal 2×2 solver and Kociemba's two-phase algorithm for the 3×3 (about 20 moves). Bigger cubes rewind your moves.
 
 <b>Make it yours</b>
-Stickerless or classic stickers, four color schemes (including a color-blind-friendly one), three body colors, four backgrounds, and animation speed.
+Stickerless or classic stickers, four color schemes (including a color-blind-friendly one), three body colors, four backgrounds, and animation speed. Available in English and Polish.
 
 <b>Private by design</b>
 No internet permission, no ads, no tracking, no analytics. Your progress never leaves your device.

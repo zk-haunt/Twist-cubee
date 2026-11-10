@@ -18,9 +18,10 @@ a real solver, speedcubing timer and statistics, in an app under 300 KB that nev
   - Drag the background, or use two fingers anywhere, to rotate freely with inertia.
   - Pinch to zoom, twist to roll, double-tap to reset the view.
   - A lock button prevents accidental rotation.
+  - Haptic feedback like a real cube: a tick when you grab a layer, a click at each quarter turn and when the turn lands.
 - **Speedcubing:**
   - An animated scramble, then a timer that starts on your first move.
-  - Optional 15-second WCA-style inspection.
+  - Optional 15-second WCA-style inspection, with haptic warnings at 8 and 12 seconds.
   - Per-size statistics: best, average, Ao5, fewest moves and recent solves.
 - **Hints in plain words** on 2×2 and 3×3, e.g. *"Turn the green face clockwise"*. The layer to turn glows and wiggles.
 - **Auto-solve:**
@@ -33,6 +34,7 @@ a real solver, speedcubing timer and statistics, in an app under 300 KB that nev
 - **Polish:**
   - Portrait and landscape layouts, edge-to-edge UI, predictive back.
   - Undo/redo, and autosave that survives crashes.
+  - English and Polish. On Android 13+ the app language can be chosen in system settings.
   - An About page with links to the developer's GitHub and X, and to the source code.
 
 ## Privacy

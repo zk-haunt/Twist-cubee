@@ -17,7 +17,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.Choreographer
 import android.view.Gravity
-import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
@@ -43,6 +42,7 @@ import app.twistcubee.game.CubeGame
 import app.twistcubee.model.Move
 import app.twistcubee.solver.SolverService
 import app.twistcubee.ui.ConfettiView
+import app.twistcubee.ui.Haptics
 import app.twistcubee.ui.SoundFx
 import app.twistcubee.ui.SwatchView
 import app.twistcubee.ui.TimerView
@@ -63,6 +63,7 @@ class MainActivity : Activity(), CubeGame.Listener {
     private lateinit var stats: Stats
     private lateinit var saves: SaveStore
     private lateinit var sound: SoundFx
+    private lateinit var haptics: Haptics
 
     private val handler = Handler(Looper.getMainLooper())
     private val pendingEvents = AtomicInteger()
@@ -117,9 +118,9 @@ class MainActivity : Activity(), CubeGame.Listener {
     private var inGame = false
     private var panelOpen = false
     private var solvedShowing = false
-    private var hapticsOn = true
     private var tipSeen = false
     private var timerTicking = false
+    private var lastInspectLeft = -1L
     private var transientText: String? = null
     private var transientUntil = 0L
     private var backCallback: Any? = null
@@ -131,6 +132,7 @@ class MainActivity : Activity(), CubeGame.Listener {
             if (!timerTicking) return
             val inspectLeft = game.tickInspection()
             if (inspectLeft >= 0) {
+                inspectionWarnings(inspectLeft)
                 timerView.setSeconds(((inspectLeft + 999) / 1000).toInt())
             } else {
                 timerView.setMillis(game.elapsedMs())
@@ -174,6 +176,7 @@ class MainActivity : Activity(), CubeGame.Listener {
         game = CubeGame(this)
         game.setDensity(density)
         bindViews()
+        haptics = Haptics(cubeView)
         applyOrientation()
         cubeView.init(game)
         applySettings()
@@ -295,35 +298,38 @@ class MainActivity : Activity(), CubeGame.Listener {
         panelContent = findViewById(R.id.panel_content)
 
         buildSizeStrip()
-        btnPlay.setOnClickListener { enterGame(newGame = !game.hasProgress()) }
-        btnNew.setOnClickListener { enterGame(newGame = game.hasProgress()) }
-        findViewById<View>(R.id.btn_stats).setOnClickListener { openPanel(getString(R.string.stats), ::buildStats) }
-        findViewById<View>(R.id.btn_settings).setOnClickListener { openPanel(getString(R.string.settings), ::buildSettings) }
-        findViewById<View>(R.id.btn_help).setOnClickListener { openPanel(getString(R.string.help), ::buildHelp) }
-        findViewById<View>(R.id.btn_about).setOnClickListener { openPanel(getString(R.string.about), ::buildAbout) }
+        btnPlay.setOnClickListener { haptics.tap(); enterGame(newGame = !game.hasProgress()) }
+        btnNew.setOnClickListener { haptics.tap(); enterGame(newGame = game.hasProgress()) }
+        findViewById<View>(R.id.btn_stats).setOnClickListener { haptics.tap(); openPanel(getString(R.string.stats), ::buildStats) }
+        findViewById<View>(R.id.btn_settings).setOnClickListener { haptics.tap(); openPanel(getString(R.string.settings), ::buildSettings) }
+        findViewById<View>(R.id.btn_help).setOnClickListener { haptics.tap(); openPanel(getString(R.string.help), ::buildHelp) }
+        findViewById<View>(R.id.btn_about).setOnClickListener { haptics.tap(); openPanel(getString(R.string.about), ::buildAbout) }
 
-        findViewById<View>(R.id.btn_back).setOnClickListener { showMenu(animate = true) }
+        findViewById<View>(R.id.btn_back).setOnClickListener { haptics.tap(); showMenu(animate = true) }
         findViewById<View>(R.id.btn_view).setOnClickListener {
+            haptics.tap()
             game.resetView()
             cubeView.requestRender()
         }
         btnLock.setOnClickListener {
             val locked = game.toggleLock()
+            haptics.toggle(locked)
             showTransient(getString(if (locked) R.string.status_locked else R.string.status_unlocked))
         }
-        btnUndo.setOnClickListener { game.undo(); cubeView.requestRender() }
-        btnRedo.setOnClickListener { game.redo(); cubeView.requestRender() }
-        btnScramble.setOnClickListener { confirmScramble() }
-        btnHint.setOnClickListener { game.requestHint(); cubeView.requestRender() }
-        btnSolve.setOnClickListener { confirmSolve() }
+        btnUndo.setOnClickListener { haptics.tap(); game.undo(); cubeView.requestRender() }
+        btnRedo.setOnClickListener { haptics.tap(); game.redo(); cubeView.requestRender() }
+        btnScramble.setOnClickListener { haptics.tap(); confirmScramble() }
+        btnHint.setOnClickListener { haptics.tap(); game.requestHint(); cubeView.requestRender() }
+        btnSolve.setOnClickListener { haptics.tap(); confirmSolve() }
 
-        findViewById<View>(R.id.solved_close).setOnClickListener { hideSolved(immediate = false) }
+        findViewById<View>(R.id.solved_close).setOnClickListener { haptics.tap(); hideSolved(immediate = false) }
         findViewById<View>(R.id.solved_new).setOnClickListener {
+            haptics.tap()
             hideSolved(immediate = false)
             game.newGame()
             cubeView.requestRender()
         }
-        findViewById<View>(R.id.panel_close).setOnClickListener { closePanel() }
+        findViewById<View>(R.id.panel_close).setOnClickListener { haptics.tap(); closePanel() }
         panelLayer.setOnClickListener { closePanel() }
 
         val insetListener = View.OnLayoutChangeListener { _, l, t, r, b, ol, ot, or, ob ->
@@ -343,7 +349,10 @@ class MainActivity : Activity(), CubeGame.Listener {
             val tv = TextView(this, null, 0, R.style.SizeChip).apply {
                 text = "%d".format(n)
                 contentDescription = getString(R.string.choose_size, n)
-                setOnClickListener { selectSize(n) }
+                setOnClickListener {
+                    haptics.tap()
+                    selectSize(n)
+                }
             }
             sizeStrip.addView(tv, LinearLayout.LayoutParams(chip, chip).apply { marginEnd = gap })
         }
@@ -438,7 +447,7 @@ class MainActivity : Activity(), CubeGame.Listener {
         game.setAnimSpeed(settings.speed)
         game.setInspection(settings.inspection)
         sound.enabled = settings.sound
-        hapticsOn = settings.haptics
+        haptics.enabled = settings.haptics
         timerBox.visibility = if (settings.showTimer) View.VISIBLE else View.INVISIBLE
         cubeView.requestRender()
     }
@@ -464,9 +473,11 @@ class MainActivity : Activity(), CubeGame.Listener {
             handler.removeCallbacks(autosave)
             handler.postDelayed(autosave, 1500)
         }
+        if (ev and CubeGame.EV_GRAB != 0) haptics.grab()
+        if (ev and CubeGame.EV_DETENT != 0) haptics.detent()
         if (ev and CubeGame.EV_MOVE_USER != 0) {
             sound.turn(true)
-            if (hapticsOn) cubeView.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+            haptics.turn()
             if (!tipSeen) {
                 tipSeen = true
                 settings.tipSeen = true
@@ -509,7 +520,10 @@ class MainActivity : Activity(), CubeGame.Listener {
         if (running || inspecting) {
             if (inspecting) {
                 val left = game.tickInspection()
-                if (left >= 0) timerView.setSeconds(((left + 999) / 1000).toInt())
+                if (left >= 0) {
+                    inspectionWarnings(left)
+                    timerView.setSeconds(((left + 999) / 1000).toInt())
+                }
             }
             if (!timerTicking) {
                 timerTicking = true
@@ -520,6 +534,13 @@ class MainActivity : Activity(), CubeGame.Listener {
             timerTicking = false
             timerView.setMillis(game.elapsedMs())
         }
+    }
+
+    /** Haptic warnings when 8 and 12 seconds of inspection have passed (7 and 3 seconds left). */
+    private fun inspectionWarnings(left: Long) {
+        val prev = lastInspectLeft
+        lastInspectLeft = left
+        if ((prev > 7_000L && left <= 7_000L) || (prev > 3_000L && left <= 3_000L)) haptics.warn()
     }
 
     private fun updateStatus() {
@@ -579,7 +600,7 @@ class MainActivity : Activity(), CubeGame.Listener {
         val ranked = timed && !assisted
         val newBest = ranked && stats.record(size, timeMs, moves)
         sound.solved()
-        if (hapticsOn) cubeView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        haptics.solved(newBest)
         saveAsync()
         if (!inGame) return
 
@@ -793,7 +814,10 @@ class MainActivity : Activity(), CubeGame.Listener {
     }
 
     private fun doSolve() {
-        if (!game.autoSolve()) showTransient(getString(R.string.status_already_solved))
+        if (!game.autoSolve()) {
+            haptics.reject()
+            showTransient(getString(R.string.status_already_solved))
+        }
         cubeView.requestRender()
     }
 
@@ -1174,6 +1198,7 @@ class MainActivity : Activity(), CubeGame.Listener {
                 }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
             }
             item.setOnClickListener {
+                haptics.tap()
                 selectOnly(row, item)
                 onSelect(i)
             }
@@ -1206,6 +1231,7 @@ class MainActivity : Activity(), CubeGame.Listener {
                 maxLines = 1
             }
             chip.setOnClickListener {
+                haptics.tap()
                 selectOnly(row, chip)
                 onSelect(i)
             }
@@ -1237,7 +1263,10 @@ class MainActivity : Activity(), CubeGame.Listener {
         @Suppress("UseSwitchCompatOrMaterialCode")
         val sw = Switch(this).apply {
             isChecked = checked
-            setOnCheckedChangeListener { _, value -> onChange(value) }
+            setOnCheckedChangeListener { _, value ->
+                onChange(value)
+                haptics.toggle(value)
+            }
         }
         row.addView(sw)
         row.setOnClickListener { sw.toggle() }

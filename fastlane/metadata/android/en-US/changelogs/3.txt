@@ -1,0 +1,3 @@
+• Haptic feedback that feels like a real cube: a light tick when you grab a layer, a click as it passes each quarter turn, and a firm click when the turn lands. Buttons, switches and the rotation lock respond too.
+• Inspection warnings at 8 and 12 seconds, and a stronger buzz when you solve (extra for a new personal best).
+• Polish translation, thanks to tmpjx555. On Android 13+ you can pick the app's language in system settings.
