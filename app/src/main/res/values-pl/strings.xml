@@ -122,8 +122,8 @@
 
     <string name="settings_colors">Schemat kolorów</string>
     <string name="settings_tiles">Płytki</string>
-    <string name="tiles_stickerless">Bez naklejek (Stickerless)</string>
-    <string name="tiles_stickers">Z naklejkami (Stickers)</string>
+    <string name="tiles_stickerless">Bez naklejek</string>
+    <string name="tiles_stickers">Z naklejkami</string>
     <string name="settings_body">Korpus kostki</string>
     <string name="settings_background">Tło</string>
     <string name="settings_speed">Prędkość animacji</string>
