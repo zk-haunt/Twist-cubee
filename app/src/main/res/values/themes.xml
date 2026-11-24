@@ -18,4 +18,21 @@
         <item name="android:colorAccent">@color/accent</item>
         <item name="android:windowBackground">@drawable/bg_panel</item>
     </style>
+
+    <!-- Dialogs and switches for AMOLED black and the light backgrounds (picked in code). -->
+    <style name="Theme.TwistCubee.Dialog.Black">
+        <item name="android:windowBackground">@drawable/bg_panel_black</item>
+    </style>
+
+    <style name="Theme.TwistCubee.Dialog.Light" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">@color/light_accent</item>
+        <item name="android:windowBackground">@drawable/bg_panel_light</item>
+        <!-- Like light_scrim: keep the screen light behind the dialog (e-ink). -->
+        <item name="android:backgroundDimAmount">0.25</item>
+    </style>
+
+    <style name="Theme.TwistCubee.LightControls" parent="@android:style/Theme.Material.Light">
+        <item name="android:colorAccent">@color/light_accent</item>
+        <item name="android:colorControlActivated">@color/light_accent</item>
+    </style>
 </resources>

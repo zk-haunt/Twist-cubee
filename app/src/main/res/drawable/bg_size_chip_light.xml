@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- bg_size_chip for light backgrounds. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/light_ripple">
+    <item>
+        <selector>
+            <item android:state_selected="true">
+                <shape android:shape="rectangle">
+                    <gradient android:angle="270" android:startColor="@color/accent_light" android:endColor="@color/accent" />
+                    <corners android:radius="12dp" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="#0D000000" />
+                    <stroke android:width="1dp" android:color="#26000000" />
+                    <corners android:radius="12dp" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</ripple>

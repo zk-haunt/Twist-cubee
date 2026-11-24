@@ -3,6 +3,11 @@
 **A fast, private, open-source 3D cube puzzle for Android.** Cubes from 2×2×2 to 20×20×20,
 a real solver, speedcubing timer and statistics, in an app under 300 KB that never touches the internet.
 
+<a href="https://f-droid.org/packages/io.github.zk_haunt.twistcubee/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80" /></a>
+
+Or download the APK from [GitHub Releases](https://github.com/zk-haunt/Twist-cubee/releases/latest).
+Both are the same build signed with the same key, so you can switch between them without reinstalling.
+
 <p>
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="24%" alt="Menu" />
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="24%" alt="Playing" />
@@ -29,7 +34,7 @@ a real solver, speedcubing timer and statistics, in an app under 300 KB that nev
   - 3×3: Kociemba's two-phase algorithm, about 20 moves.
   - Larger cubes: rewinds your move history.
 - **Customization:**
-  - Stickerless or classic stickers, 4 color schemes (one color-blind friendly), 3 body colors and 4 backgrounds.
+  - Stickerless or classic stickers, 4 color schemes (one color-blind friendly), 3 body colors and 4 backgrounds (Dark night, AMOLED black, Light and E-ink white) that restyle the whole app.
   - Animation speed, sound and haptics.
 - **Polish:**
   - Portrait and landscape layouts, edge-to-edge UI, predictive back.

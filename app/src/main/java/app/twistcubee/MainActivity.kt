@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.Typeface
@@ -16,10 +17,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Choreographer
+import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
@@ -38,6 +41,7 @@ import app.twistcubee.data.Palettes
 import app.twistcubee.data.SaveStore
 import app.twistcubee.data.Settings
 import app.twistcubee.data.Stats
+import app.twistcubee.data.Tone
 import app.twistcubee.game.CubeGame
 import app.twistcubee.model.Move
 import app.twistcubee.solver.SolverService
@@ -78,7 +82,7 @@ class MainActivity : Activity(), CubeGame.Listener {
     private lateinit var menuSpacer: View
     private lateinit var menuTop: View
     private lateinit var menuTitle: TextView
-    private lateinit var menuSubtitle: View
+    private lateinit var menuSubtitle: TextView
     private lateinit var menuBottom: View
     private lateinit var menuIcons: View
     private lateinit var gameLayer: View
@@ -102,16 +106,21 @@ class MainActivity : Activity(), CubeGame.Listener {
     private lateinit var btnHint: View
     private lateinit var btnSolve: View
     private lateinit var btnLock: ImageButton
+    private lateinit var topIconButtons: List<ImageButton>
     private lateinit var solvedLayer: View
     private lateinit var solvedCard: View
     private lateinit var solvedTime: TextView
     private lateinit var solvedDetail: TextView
     private lateinit var solvedBadge: TextView
+    private lateinit var solvedTitle: TextView
+    private lateinit var solvedClose: Button
     private lateinit var confetti: ConfettiView
     private lateinit var panelLayer: View
     private lateinit var panelCard: View
     private lateinit var panelTitle: TextView
     private lateinit var panelContent: LinearLayout
+    private lateinit var panelClose: ImageButton
+    private var panelBuilder: ((LinearLayout) -> Unit)? = null
 
     private var size = 3
     private var landscape = false
@@ -125,6 +134,13 @@ class MainActivity : Activity(), CubeGame.Listener {
     private var transientUntil = 0L
     private var backCallback: Any? = null
     private var density = 1f
+
+    /** UI colors for the current background; see [applyTone]. */
+    private var tone = Tone.DEFAULT
+    private var uiText = Color.WHITE
+    private var uiTextSecondary = 0xB3FFFFFF.toInt()
+    private var uiTextTertiary = 0x80FFFFFF.toInt()
+    private var uiAccent = 0
 
     /** Drives the stopwatch (and the inspection countdown) once per display frame while running. */
     private val timerCallback = object : Choreographer.FrameCallback {
@@ -286,16 +302,20 @@ class MainActivity : Activity(), CubeGame.Listener {
         btnHint = findViewById(R.id.btn_hint)
         btnSolve = findViewById(R.id.btn_solve)
         btnLock = findViewById(R.id.btn_lock)
+        topIconButtons = listOf(findViewById<ImageButton>(R.id.btn_back), findViewById<ImageButton>(R.id.btn_view), btnLock)
         solvedLayer = findViewById(R.id.solved_layer)
         solvedCard = findViewById(R.id.solved_card)
         solvedTime = findViewById(R.id.solved_time)
         solvedDetail = findViewById(R.id.solved_detail)
         solvedBadge = findViewById(R.id.solved_badge)
+        solvedTitle = findViewById(R.id.solved_title)
+        solvedClose = findViewById(R.id.solved_close)
         confetti = findViewById(R.id.confetti)
         panelLayer = findViewById(R.id.panel_layer)
         panelCard = findViewById(R.id.panel_card)
         panelTitle = findViewById(R.id.panel_title)
         panelContent = findViewById(R.id.panel_content)
+        panelClose = findViewById(R.id.panel_close)
 
         buildSizeStrip()
         btnPlay.setOnClickListener { haptics.tap(); enterGame(newGame = !game.hasProgress()) }
@@ -322,14 +342,14 @@ class MainActivity : Activity(), CubeGame.Listener {
         btnHint.setOnClickListener { haptics.tap(); game.requestHint(); cubeView.requestRender() }
         btnSolve.setOnClickListener { haptics.tap(); confirmSolve() }
 
-        findViewById<View>(R.id.solved_close).setOnClickListener { haptics.tap(); hideSolved(immediate = false) }
+        solvedClose.setOnClickListener { haptics.tap(); hideSolved(immediate = false) }
         findViewById<View>(R.id.solved_new).setOnClickListener {
             haptics.tap()
             hideSolved(immediate = false)
             game.newGame()
             cubeView.requestRender()
         }
-        findViewById<View>(R.id.panel_close).setOnClickListener { haptics.tap(); closePanel() }
+        panelClose.setOnClickListener { haptics.tap(); closePanel() }
         panelLayer.setOnClickListener { closePanel() }
 
         val insetListener = View.OnLayoutChangeListener { _, l, t, r, b, ol, ot, or, ob ->
@@ -449,7 +469,111 @@ class MainActivity : Activity(), CubeGame.Listener {
         sound.enabled = settings.sound
         haptics.enabled = settings.haptics
         timerBox.visibility = if (settings.showTimer) View.VISIBLE else View.INVISIBLE
+        applyTone()
         cubeView.requestRender()
+    }
+
+    /**
+     * Colors the app's own UI for the background: navy surfaces on Dark night, pure black ones on
+     * AMOLED black, and dark text on white surfaces on Light and E-ink white. Panel content is built
+     * on open, so the builders read [tone] and the ui* colors themselves.
+     */
+    private fun applyTone() {
+        val newTone = Palettes.tone(Palettes.BACKGROUNDS[settings.background])
+        val changed = newTone != tone
+        tone = newTone
+        val light = newTone == Tone.LIGHT
+        uiText = getColor(if (light) R.color.light_text_primary else R.color.text_primary)
+        uiTextSecondary = getColor(if (light) R.color.light_text_secondary else R.color.text_secondary)
+        uiTextTertiary = getColor(if (light) R.color.light_text_tertiary else R.color.text_tertiary)
+        uiAccent = getColor(if (light) R.color.light_accent else R.color.accent)
+        val iconTint = ColorStateList.valueOf(uiText)
+        val barItemBg = byTone(R.drawable.bg_bar_item, R.drawable.bg_bar_item, R.drawable.bg_bar_item_light)
+        val secondaryButtonBg = byTone(R.drawable.bg_button_secondary, R.drawable.bg_button_secondary, R.drawable.bg_button_secondary_light)
+        val panelBg = byTone(R.drawable.bg_panel, R.drawable.bg_panel_black, R.drawable.bg_panel_light)
+
+        // Menu: straight on the background.
+        menuTitle.setTextColor(uiText)
+        // Same shadow as the Title style; a radius of 0 removes it.
+        menuTitle.setShadowLayer(if (light) 0f else 8f, 0f, 2f, 0x66000000)
+        menuSubtitle.setTextColor(uiAccent)
+        sizeLabel.setTextColor(uiText)
+        sizeName.setTextColor(uiAccent)
+        sizeInfo.setTextColor(uiTextSecondary)
+        val chipText = getColorStateList(if (light) R.color.size_chip_text_light else R.color.size_chip_text)
+        for (i in 0 until sizeStrip.childCount) {
+            val chip = sizeStrip.getChildAt(i) as TextView
+            chip.setBackgroundResource(byTone(R.drawable.bg_size_chip, R.drawable.bg_size_chip, R.drawable.bg_size_chip_light))
+            chip.setTextColor(chipText)
+        }
+        btnNew.setBackgroundResource(secondaryButtonBg)
+        btnNew.setTextColor(uiText)
+        val icons = menuIcons as ViewGroup
+        for (i in 0 until icons.childCount) {
+            val item = icons.getChildAt(i) as TextView
+            item.setBackgroundResource(barItemBg)
+            item.setTextColor(uiTextSecondary)
+            item.compoundDrawableTintList = iconTint
+        }
+
+        // Game: top row on the background, toolbar and status pill on their own surfaces.
+        for (b in topIconButtons) {
+            b.setBackgroundResource(byTone(R.drawable.bg_round_icon, R.drawable.bg_round_icon, R.drawable.bg_round_icon_light))
+            b.imageTintList = iconTint
+        }
+        movesView.setTextColor(uiTextSecondary)
+        timerView.setShadow(!light)
+        statusView.setBackgroundResource(byTone(R.drawable.bg_status_pill, R.drawable.bg_status_pill_black, R.drawable.bg_status_pill_light))
+        statusView.setTextColor(uiText)
+        gameBottom.setBackgroundResource(byTone(R.drawable.bg_bottom_bar, R.drawable.bg_bottom_bar_black, R.drawable.bg_bottom_bar_light))
+        for (i in 0 until gameBottom.childCount) {
+            val item = gameBottom.getChildAt(i) as TextView
+            item.setBackgroundResource(barItemBg)
+            item.setTextColor(uiTextSecondary)
+            item.compoundDrawableTintList = iconTint
+        }
+
+        // Solved card and panels.
+        solvedCard.setBackgroundResource(panelBg)
+        solvedTitle.setTextColor(uiAccent)
+        solvedTime.setTextColor(uiText)
+        solvedDetail.setTextColor(uiTextSecondary)
+        solvedBadge.setTextColor(uiAccent)
+        solvedClose.setBackgroundResource(secondaryButtonBg)
+        solvedClose.setTextColor(uiText)
+        panelLayer.setBackgroundColor(getColor(if (light) R.color.light_scrim else R.color.scrim))
+        panelCard.setBackgroundResource(panelBg)
+        panelTitle.setTextColor(uiText)
+        panelClose.setBackgroundResource(barItemBg)
+        panelClose.imageTintList = iconTint
+        updateSystemBars()
+        // Picked from the open Settings panel: redraw its content in the new colors.
+        if (changed && panelOpen) handler.post { rebuildPanel() }
+    }
+
+    private fun byTone(default: Int, black: Int, light: Int): Int = when (tone) {
+        Tone.DEFAULT -> default
+        Tone.BLACK -> black
+        Tone.LIGHT -> light
+    }
+
+    private fun dialogTheme(): Int =
+        byTone(R.style.Theme_TwistCubee_Dialog, R.style.Theme_TwistCubee_Dialog_Black, R.style.Theme_TwistCubee_Dialog_Light)
+
+    /** Dark status and navigation bar icons over a light background. */
+    @Suppress("DEPRECATION")
+    private fun updateSystemBars() {
+        val darkIcons = tone == Tone.LIGHT
+        if (Build.VERSION.SDK_INT >= 30) {
+            val mask = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or
+                WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+            window.insetsController?.setSystemBarsAppearance(if (darkIcons) mask else 0, mask)
+        } else {
+            var mask = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            if (Build.VERSION.SDK_INT >= 26) mask = mask or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            val decor = window.decorView
+            decor.systemUiVisibility = if (darkIcons) decor.systemUiVisibility or mask else decor.systemUiVisibility and mask.inv()
+        }
     }
 
     // ------------------------------------------------------------------ game events
@@ -511,10 +635,10 @@ class MainActivity : Activity(), CubeGame.Listener {
         val inspecting = inGame && hud.inspecting
         timerView.setColor(
             when {
-                inspecting -> getColor(R.color.accent)
-                running -> Color.WHITE
-                hud.status == CubeGame.ST_FREE && hud.solved && game.elapsedMs() > 0 -> getColor(R.color.accent)
-                else -> 0xB3FFFFFF.toInt()
+                inspecting -> uiAccent
+                running -> uiText
+                hud.status == CubeGame.ST_FREE && hud.solved && game.elapsedMs() > 0 -> uiAccent
+                else -> uiTextSecondary
             },
         )
         if (running || inspecting) {
@@ -802,7 +926,7 @@ class MainActivity : Activity(), CubeGame.Listener {
         game.hud(hud)
         val timedAttempt = hud.status == CubeGame.ST_SOLVING && hud.moves > 0
         if (timedAttempt) {
-            AlertDialog.Builder(this)
+            AlertDialog.Builder(this, dialogTheme())
                 .setTitle(R.string.confirm_solve_title)
                 .setMessage(R.string.confirm_solve_message)
                 .setPositiveButton(R.string.confirm_solve_ok) { _, _ -> doSolve() }
@@ -824,7 +948,7 @@ class MainActivity : Activity(), CubeGame.Listener {
     private fun confirmScramble() {
         game.hud(hud)
         if (hud.status == CubeGame.ST_SOLVING && hud.moves > 0) {
-            AlertDialog.Builder(this)
+            AlertDialog.Builder(this, dialogTheme())
                 .setTitle(R.string.confirm_scramble_title)
                 .setMessage(R.string.confirm_scramble_message)
                 .setPositiveButton(R.string.confirm_scramble_ok) { _, _ -> scramble() }
@@ -843,6 +967,7 @@ class MainActivity : Activity(), CubeGame.Listener {
 
     private fun openPanel(title: String, build: (LinearLayout) -> Unit) {
         panelTitle.text = title
+        panelBuilder = build
         panelContent.removeAllViews()
         build(panelContent)
         val lp = panelCard.layoutParams
@@ -868,9 +993,21 @@ class MainActivity : Activity(), CubeGame.Listener {
         if (!inGame) updateMenu()
     }
 
+    /** Re-creates the open panel's content in the current colors, keeping its scroll position. */
+    private fun rebuildPanel() {
+        val build = panelBuilder ?: return
+        if (!panelOpen) return
+        val scroll = panelContent.parent as View
+        val y = scroll.scrollY
+        panelContent.removeAllViews()
+        build(panelContent)
+        scroll.post { scroll.scrollTo(0, y) }
+    }
+
     private fun buildHelp(c: LinearLayout) {
         c.addView(TextView(this).apply {
             setTextAppearance(R.style.BodyText)
+            setTextColor(uiTextSecondary)
             text = getString(R.string.help_text)
         })
         c.addView(privacyNote())
@@ -892,19 +1029,20 @@ class MainActivity : Activity(), CubeGame.Listener {
             setPadding((14 * density).toInt(), 0, 0, 0)
             addView(TextView(context).apply {
                 text = getString(R.string.app_name)
-                setTextColor(Color.WHITE)
+                setTextColor(uiText)
                 textSize = 20f
                 typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             })
             addView(TextView(context).apply {
                 text = getString(R.string.about_version, versionName())
-                setTextColor(getColor(R.color.text_tertiary))
+                setTextColor(uiTextTertiary)
                 textSize = 12f
             })
         })
         c.addView(header)
         c.addView(TextView(this).apply {
             setTextAppearance(R.style.BodyText)
+            setTextColor(uiTextSecondary)
             text = getString(R.string.about_tagline)
             setPadding(0, (14 * density).toInt(), 0, 0)
         })
@@ -943,7 +1081,7 @@ class MainActivity : Activity(), CubeGame.Listener {
 
     private fun smallText(value: String): TextView = TextView(this).apply {
         text = value
-        setTextColor(getColor(R.color.text_secondary))
+        setTextColor(uiTextSecondary)
         textSize = 13f
         setLineSpacing(0f, 1.15f)
     }
@@ -953,7 +1091,7 @@ class MainActivity : Activity(), CubeGame.Listener {
         val row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setBackgroundResource(R.drawable.bg_link_row)
+            setBackgroundResource(byTone(R.drawable.bg_link_row, R.drawable.bg_link_row, R.drawable.bg_link_row_light))
             val h = (14 * density).toInt()
             val v = (11 * density).toInt()
             setPadding(h, v, h, v)
@@ -965,6 +1103,7 @@ class MainActivity : Activity(), CubeGame.Listener {
         }
         row.addView(ImageView(this).apply {
             setImageResource(icon)
+            imageTintList = ColorStateList.valueOf(uiText)
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         }, LinearLayout.LayoutParams((24 * density).toInt(), (24 * density).toInt()))
         row.addView(LinearLayout(this).apply {
@@ -972,18 +1111,19 @@ class MainActivity : Activity(), CubeGame.Listener {
             setPadding((14 * density).toInt(), 0, (8 * density).toInt(), 0)
             addView(TextView(context).apply {
                 text = title
-                setTextColor(Color.WHITE)
+                setTextColor(uiText)
                 textSize = 15f
                 maxLines = 1
             })
             addView(TextView(context).apply {
                 text = detail
-                setTextColor(getColor(R.color.text_tertiary))
+                setTextColor(uiTextTertiary)
                 textSize = 12f
             })
         }, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         row.addView(ImageView(this).apply {
             setImageResource(R.drawable.ic_open_in_new)
+            imageTintList = ColorStateList.valueOf(uiText)
             alpha = 0.55f
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         }, LinearLayout.LayoutParams((18 * density).toInt(), (18 * density).toInt()))
@@ -1005,7 +1145,7 @@ class MainActivity : Activity(), CubeGame.Listener {
 
     private fun privacyNote(): View = TextView(this).apply {
         text = getString(R.string.privacy_note)
-        setTextColor(getColor(R.color.text_tertiary))
+        setTextColor(uiTextTertiary)
         textSize = 12f
         setPadding(0, (18 * density).toInt(), 0, 0)
     }
@@ -1017,20 +1157,20 @@ class MainActivity : Activity(), CubeGame.Listener {
             any = true
             val card = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
-                setBackgroundResource(R.drawable.bg_stat_card)
+                setBackgroundResource(byTone(R.drawable.bg_stat_card, R.drawable.bg_stat_card, R.drawable.bg_stat_card_light))
                 val p = (14 * density).toInt()
                 setPadding(p, p, p, p)
             }
             val header = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
             header.addView(TextView(this).apply {
                 text = getString(R.string.size_format, n)
-                setTextColor(Color.WHITE)
+                setTextColor(uiText)
                 textSize = 17f
                 typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             }, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
             header.addView(TextView(this).apply {
                 text = resources.getQuantityString(R.plurals.solves_count, s.solves, s.solves)
-                setTextColor(getColor(R.color.text_tertiary))
+                setTextColor(uiTextTertiary)
                 textSize = 13f
             })
             card.addView(header)
@@ -1047,7 +1187,7 @@ class MainActivity : Activity(), CubeGame.Listener {
             if (recent.size > 1) {
                 card.addView(TextView(this).apply {
                     text = getString(R.string.stats_recent, recent.joinToString("  ·  ") { TimerView.format(it) })
-                    setTextColor(getColor(R.color.text_tertiary))
+                    setTextColor(uiTextTertiary)
                     textSize = 12f
                     fontFeatureSettings = "tnum"
                     setPadding(0, (10 * density).toInt(), 0, 0)
@@ -1060,6 +1200,7 @@ class MainActivity : Activity(), CubeGame.Listener {
         if (!any) {
             c.addView(TextView(this).apply {
                 setTextAppearance(R.style.BodyText)
+                setTextColor(uiTextSecondary)
                 text = getString(R.string.stats_empty)
                 gravity = Gravity.CENTER
                 val p = (24 * density).toInt()
@@ -1072,14 +1213,14 @@ class MainActivity : Activity(), CubeGame.Listener {
         orientation = LinearLayout.VERTICAL
         addView(TextView(context).apply {
             text = value
-            setTextColor(Color.WHITE)
+            setTextColor(uiText)
             textSize = 15f
             fontFeatureSettings = "tnum"
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
         })
         addView(TextView(context).apply {
             text = label
-            setTextColor(getColor(R.color.text_tertiary))
+            setTextColor(uiTextTertiary)
             textSize = 11f
         })
     }
@@ -1108,9 +1249,10 @@ class MainActivity : Activity(), CubeGame.Listener {
         })
 
         c.addView(sectionLabel(R.string.settings_background))
+        // Two per row so the longer names ("AMOLED black") fit.
         c.addView(previewRow(Palettes.BACKGROUNDS.size, settings.background, { Palettes.BACKGROUND_NAMES[it] }, {
             gradientPreview(Palettes.BACKGROUNDS[it])
-        }) {
+        }, columns = 2) {
             settings.background = it
             applySettings()
         })
@@ -1147,11 +1289,11 @@ class MainActivity : Activity(), CubeGame.Listener {
             setText(R.string.settings_reset_stats)
             setTextAppearance(R.style.SecondaryButton)
             isAllCaps = false
-            setBackgroundResource(R.drawable.bg_button_secondary)
-            setTextColor(Color.WHITE)
+            setBackgroundResource(byTone(R.drawable.bg_button_secondary, R.drawable.bg_button_secondary, R.drawable.bg_button_secondary_light))
+            setTextColor(uiText)
             stateListAnimator = null
             setOnClickListener {
-                AlertDialog.Builder(this@MainActivity)
+                AlertDialog.Builder(this@MainActivity, dialogTheme())
                     .setTitle(R.string.confirm_reset_title)
                     .setMessage(R.string.confirm_reset_message)
                     .setPositiveButton(R.string.confirm_reset_ok) { _, _ -> stats.reset() }
@@ -1166,55 +1308,70 @@ class MainActivity : Activity(), CubeGame.Listener {
 
     private fun sectionLabel(res: Int): View = TextView(this).apply {
         setTextAppearance(R.style.SectionLabel)
+        setTextColor(uiTextTertiary)
         if (res != 0) text = getString(res)
         setPadding(0, (18 * density).toInt(), 0, (8 * density).toInt())
     }
 
-    /** Row of selectable cards, each with a small preview and a label. */
+    /** Selectable cards, each with a small preview and a label, in rows of [columns]. */
     private fun previewRow(
         count: Int,
         selected: Int,
         label: (Int) -> String,
         preview: (Int) -> View,
+        columns: Int = count,
         onSelect: (Int) -> Unit,
     ): View {
-        val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        val gap = (8 * density).toInt()
+        val grid = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        val items = ArrayList<View>(count)
+        lateinit var row: LinearLayout
         for (i in 0 until count) {
+            if (i % columns == 0) {
+                row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+                grid.addView(row, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                    if (i > 0) topMargin = gap
+                })
+            }
             val item = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
                 gravity = Gravity.CENTER_HORIZONTAL
-                setBackgroundResource(R.drawable.bg_chip)
-                val p = (8 * density).toInt()
-                setPadding(p / 2, p, p / 2, p)
+                setBackgroundResource(byTone(R.drawable.bg_chip, R.drawable.bg_chip, R.drawable.bg_chip_light))
+                setPadding(gap / 2, gap, gap / 2, gap)
                 isSelected = selected == i
                 addView(preview(i))
                 addView(TextView(context).apply {
                     text = label(i)
-                    setTextColor(getColor(R.color.text_secondary))
+                    setTextColor(uiTextSecondary)
                     textSize = 11f
                     gravity = Gravity.CENTER
                     setPadding(0, (6 * density).toInt(), 0, 0)
                     maxLines = 1
                 }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
             }
+            items.add(item)
             item.setOnClickListener {
                 haptics.tap()
-                selectOnly(row, item)
+                for (other in items) other.isSelected = other === item
                 onSelect(i)
             }
             row.addView(item, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
-                if (i > 0) marginStart = (8 * density).toInt()
+                if (i % columns > 0) marginStart = gap
             })
         }
-        return row
+        return grid
     }
 
     private fun gradientPreview(colors: IntArray): View = View(this).apply {
         background = GradientDrawable(
             GradientDrawable.Orientation.TOP_BOTTOM,
             intArrayOf(0xFF000000.toInt() or colors[0], 0xFF000000.toInt() or colors[1]),
-        ).apply { cornerRadius = 6 * density }
-        layoutParams = LinearLayout.LayoutParams((54 * density).toInt(), (38 * density).toInt())
+        ).apply {
+            cornerRadius = 6 * density
+            // Outline so the flat AMOLED black and E-ink white swatches stand out from the card.
+            setStroke(density.toInt().coerceAtLeast(1), if (tone == Tone.LIGHT) 0x26000000 else 0x33FFFFFF)
+        }
+        layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (38 * density).toInt())
     }
 
     private fun chipRow(labels: List<String>, selected: Int, onSelect: (Int) -> Unit): View {
@@ -1223,9 +1380,9 @@ class MainActivity : Activity(), CubeGame.Listener {
             val chip = TextView(this).apply {
                 text = label
                 gravity = Gravity.CENTER
-                setTextColor(Color.WHITE)
+                setTextColor(uiText)
                 textSize = 13f
-                setBackgroundResource(R.drawable.bg_chip)
+                setBackgroundResource(byTone(R.drawable.bg_chip, R.drawable.bg_chip, R.drawable.bg_chip_light))
                 minHeight = (40 * density).toInt()
                 isSelected = i == selected
                 maxLines = 1
@@ -1257,11 +1414,11 @@ class MainActivity : Activity(), CubeGame.Listener {
         }
         row.addView(TextView(this).apply {
             setText(label)
-            setTextColor(Color.WHITE)
+            setTextColor(uiText)
             textSize = 15f
         }, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         @Suppress("UseSwitchCompatOrMaterialCode")
-        val sw = Switch(this).apply {
+        val sw = Switch(if (tone == Tone.LIGHT) ContextThemeWrapper(this, R.style.Theme_TwistCubee_LightControls) else this).apply {
             isChecked = checked
             setOnCheckedChangeListener { _, value ->
                 onChange(value)

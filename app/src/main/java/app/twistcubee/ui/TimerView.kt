@@ -23,13 +23,13 @@ class TimerView @JvmOverloads constructor(
         typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
         textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 30f, resources.displayMetrics)
         fontFeatureSettings = "tnum"
-        setShadowLayer(6f, 0f, 2f, 0x66000000)
     }
     private val chars = CharArray(16)
     private var len = 0
     private var shownCentis = -1L
 
     init {
+        setShadow(true)
         setMillis(0L)
     }
 
@@ -38,6 +38,12 @@ class TimerView @JvmOverloads constructor(
             paint.color = color
             invalidate()
         }
+    }
+
+    /** The drop shadow lifts light digits off a dark background; on a light one it only blurs. */
+    fun setShadow(enabled: Boolean) {
+        if (enabled) paint.setShadowLayer(6f, 0f, 2f, 0x66000000) else paint.clearShadowLayer()
+        invalidate()
     }
 
     fun setMillis(ms: Long) {

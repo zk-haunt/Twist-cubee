@@ -165,9 +165,11 @@ void main() {
     vec3 c = mix(uBottom, uTop, vUv.y);
     vec2 d = (vUv - uGlowPos) * vec2(uAspect, 1.0);
     c += uGlow * (1.0 - smoothstep(0.0, 0.85, length(d)));
-    // Interleaved gradient noise dithering removes banding in the dark gradient.
+    // Interleaved gradient noise dithering removes banding in the dark gradient. Flat backgrounds
+    // skip it so every pixel stays exactly pure black (OLED) or pure white (e-ink).
+    float ramp = step(0.0001, dot(abs(uTop - uBottom) + uGlow, vec3(1.0)));
     float noise = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
-    c += (noise - 0.5) / 255.0;
+    c += ramp * (noise - 0.5) / 255.0;
     oColor = vec4(c, 1.0);
 }
 """

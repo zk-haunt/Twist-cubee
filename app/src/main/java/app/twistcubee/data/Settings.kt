@@ -19,9 +19,14 @@ class Settings(context: Context) {
         get() = prefs.getInt("tiles", 0).coerceIn(0, 1)
         set(v) = prefs.edit().putInt("tiles", v).apply()
 
+    /**
+     * Index into [Palettes.BACKGROUNDS]. Up to 1.1.0 the "background" key indexed a different list
+     * (Midnight, Ocean, Plum, Graphite), so a new key is used and everyone upgrading starts on Dark
+     * night, the old Midnight.
+     */
     var background: Int
-        get() = prefs.getInt("background", 0).coerceIn(0, Palettes.BACKGROUNDS.size - 1)
-        set(v) = prefs.edit().putInt("background", v).apply()
+        get() = prefs.getInt("background_v2", 0).coerceIn(0, Palettes.BACKGROUNDS.size - 1)
+        set(v) = prefs.edit().putInt("background_v2", v).remove("background").apply()
 
     /** 0 = slow, 1 = normal, 2 = fast, 3 = instant. */
     var speed: Int
@@ -72,12 +77,32 @@ object Palettes {
     val BODIES = intArrayOf(0x121316, 0x30343C, 0xE4E6EA)
     val BODY_NAMES = arrayOf("Black", "Graphite", "White")
 
-    /** Background gradients: top, bottom, glow behind the cube. */
+    /**
+     * Background gradients: top, bottom, glow behind the cube. The saved setting is an index, so
+     * new entries go at the end. AMOLED black and E-ink white are flat (no gradient, glow or
+     * dithering), so OLED pixels stay fully off and e-ink screens get clean white.
+     */
     val BACKGROUNDS = arrayOf(
         intArrayOf(0x1A2238, 0x070A12, 0x0F2229),
-        intArrayOf(0x0D3746, 0x03111A, 0x0E2E36),
-        intArrayOf(0x2E1F47, 0x0B0713, 0x251A36),
-        intArrayOf(0x2A2D33, 0x0B0C0F, 0x1E2024),
+        intArrayOf(0x000000, 0x000000, 0x000000),
+        intArrayOf(0xF2F4F8, 0xD9DEE6, 0x0A0A0A),
+        intArrayOf(0xFFFFFF, 0xFFFFFF, 0x000000),
     )
-    val BACKGROUND_NAMES = arrayOf("Midnight", "Ocean", "Plum", "Graphite")
+    val BACKGROUND_NAMES = arrayOf("Dark night", "AMOLED black", "Light", "E-ink white")
+
+    /** How the app's own UI (text, panels, toolbar) is drawn over the background [colors]. */
+    fun tone(colors: IntArray): Tone = when {
+        luminance(colors[0]) + luminance(colors[1]) > 1f -> Tone.LIGHT
+        colors.all { it == 0 } -> Tone.BLACK
+        else -> Tone.DEFAULT
+    }
+
+    private fun luminance(rgb: Int): Float =
+        (0.2126f * (rgb shr 16 and 0xFF) + 0.7152f * (rgb shr 8 and 0xFF) + 0.0722f * (rgb and 0xFF)) / 255f
 }
+
+/**
+ * DEFAULT: navy panels matching Dark night. BLACK: the same light-on-dark UI on pure black
+ * surfaces (AMOLED black). LIGHT: dark text on white surfaces (Light and E-ink white).
+ */
+enum class Tone { DEFAULT, BLACK, LIGHT }

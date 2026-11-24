@@ -1,0 +1,2 @@
+• New backgrounds that restyle the whole app, menus, panels and dialogs included: Dark night (the old Midnight), AMOLED black (pure black, so OLED pixels stay off), Light, and E-ink white (flat white for e-ink screens). Thanks to GitEin11 and Manamama for the requests.
+• Ocean, Plum and Graphite are gone wrt minimalism. If you used one of them, the app starts on Dark night; pick another in Settings.

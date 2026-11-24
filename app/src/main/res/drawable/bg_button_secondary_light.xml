@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- bg_button_secondary for light backgrounds. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/light_ripple">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#0A000000" />
+            <stroke android:width="1.5dp" android:color="#47000000" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+</ripple>

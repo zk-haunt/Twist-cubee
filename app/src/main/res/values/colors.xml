@@ -16,4 +16,13 @@
     <color name="icon_button">#1AFFFFFF</color>
     <color name="ripple">#33FFFFFF</color>
     <color name="scrim">#B3000000</color>
+
+    <!-- All UI on Light and E-ink white: dark text, light surfaces. -->
+    <color name="light_text_primary">#FF0E1116</color>
+    <color name="light_text_secondary">#B3000000</color>
+    <color name="light_text_tertiary">#8A000000</color>
+    <color name="light_accent">#FF0B7A5F</color>
+    <color name="light_ripple">#1F000000</color>
+    <!-- Light enough that an e-ink screen does not turn grey behind a panel. -->
+    <color name="light_scrim">#40000000</color>
 </resources>
